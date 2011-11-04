@@ -1,0 +1,12 @@
+{application, z_validate,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { z_validate, []}},
+  {env, []}
+ ]}.
