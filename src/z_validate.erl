@@ -50,7 +50,7 @@ z_int_in_range({Val, Error}=Input, {Low, High}) ->
 -spec z_int_in_range(z_value(integer()),
                      {integer(), integer()},
                      error_atom()) -> z_value(integer()).
-z_int_in_range({Val, _Error}, [Low, High], NewError) ->
+z_int_in_range({Val, _Error}, {Low, High}, NewError) ->
     case (is_integer(Val)
           andalso Val >= Low
           andalso Val =< High) of
