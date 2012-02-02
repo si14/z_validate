@@ -1,9 +1,12 @@
 -module(z_validate).
--export([z_wrap/2, z_unwrap/1,
+-export([z_wrap/1, z_wrap/2, z_unwrap/1,
+         z_in_list/2, z_in_list/3,
          z_proplist_get/2, z_proplist_get/3,
          z_int_in_range/2, z_int_in_range/3,
          z_bin_to_int/1, z_bin_to_int/2,
          z_bin_to_list/1, z_bin_to_list/2,
+         z_bin_to_bool/1, z_bin_to_bool/2,
+         z_bin_to_ex_atom/1, z_bin_to_ex_atom/2,
          z_only_loweralpha/1, z_only_loweralpha/2,
          z_verify/2, z_verify/3,
          z_apply/2, z_apply/3,
@@ -84,6 +87,41 @@ z_bin_to_list({Val, _Error}, NewError) ->
     case catch binary_to_list(Val) of
         X when is_list(X) -> {X, NewError};
         _                 -> ?THROW_Z_ERROR(NewError)
+    end.
+
+-spec z_bin_to_bool(z_value(binary()), error_atom()) -> z_value(boolean()).
+z_bin_to_bool({Val, _Error}, NewError) ->
+    case catch list_to_existing_atom(binary_to_list(Val)) of
+        X when is_boolean(X) -> {X, NewError};
+        _                    -> ?THROW_Z_ERROR(NewError)
+    end.
+
+-spec z_bin_to_bool(z_value(binary())) -> z_value(boolean()).
+z_bin_to_bool({_Val, Error} = ZVal) -> z_bin_to_bool(ZVal, Error).
+
+-spec z_in_list(z_value(A), {list(A)}) -> z_value(A).
+z_in_list({_Val, Error} = ZVal, Args) ->
+    z_in_list(ZVal, Args, Error).
+
+-spec z_in_list(z_value(A), {list(A)}, error_atom()) -> z_value(A).
+z_in_list({Val, _Error}, {Lst}, NewError) ->
+    case catch lists:member(Val, Lst) of
+        true -> {Val, NewError};
+        _    -> ?THROW_Z_ERROR(NewError)
+    end.
+
+-spec z_wrap(value(A)) -> z_value(A).
+z_wrap(Input) -> {Input, undefined}.
+
+-spec z_bin_to_ex_atom(z_value(binary())) -> z_value(atom()).
+z_bin_to_ex_atom({_Val, Error} = ZVal) ->
+    z_bin_to_ex_atom(ZVal, Error).
+
+-spec z_bin_to_ex_atom(z_value(binary()), error_atom()) -> z_value(atom()).
+z_bin_to_ex_atom({Val, _Error}, NewError) ->
+    case catch list_to_existing_atom(binary_to_list(Val)) of
+        X when is_atom(X) -> {X, NewError};
+        _    -> ?THROW_Z_ERROR(NewError)
     end.
 
 -spec z_only_loweralpha(z_value(string())) -> z_value(string()).
