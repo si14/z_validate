@@ -22,6 +22,7 @@ handle_output({error, Error}) ->
 
 err_to_str(error_in_foo) -> "you have an error in your foo!";
 err_to_str(error_in_bar) -> "you have an error in your bar!";
+err_to_str(math_error)   -> "math error";
 err_to_str(bad_guy)      -> "looks like you are bad guy!".
 
 handle_input(Input) ->
@@ -35,6 +36,8 @@ handle_input(Input) ->
         GoodBar2 = z_only_loweralpha(MaybeBadBar, bad_guy),
         GoodBar2 = GoodBar1,
         GoodBarUpper = z_apply(fun upper/1, GoodBar1),
+        ?Z_CATCH(throw(foobar)),
+        ?Z_CATCH(throw(foobar), math_error),
         z_return({z_unwrap(SmallFoo),
                   z_unwrap(GoodBarUpper)})
     catch
