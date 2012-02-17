@@ -68,7 +68,7 @@ z_apply(Fun, {Val, _Error}, NewError) ->
 
 -spec z_proplist_get(z_value([{A, B}]), {A}) -> z_value(B).
 z_proplist_get({_Val, Error} = Z, Args) -> z_proplist_get(Z, Args, Error).
-    
+
 -spec z_proplist_get(z_value([{A, B}]), {A}, error_atom()) -> z_value(B).
 z_proplist_get({Val, _Error}, {Key}, NewError) ->
     case catch lists:keyfind(Key, 1, Val) of
@@ -77,16 +77,16 @@ z_proplist_get({Val, _Error}, {Key}, NewError) ->
     end.
 
 -spec z_int_in_range(z_value(integer()),
-                     {integer(), integer()}) -> z_value(integer()).
+                     {integer() | any, integer() | any}) -> z_value(integer()).
 z_int_in_range({_Val, Error}=Z, Args) -> z_int_in_range(Z, Args, Error).
-    
+
 -spec z_int_in_range(z_value(integer()),
-                     {integer(), integer()},
+                     {integer() | any, integer() | any},
                      error_atom()) -> z_value(integer()).
 z_int_in_range({Val, _Error}, {Low, High}, NewError) ->
     case (is_integer(Val)
-          andalso Val >= Low
-          andalso Val =< High) of
+          andalso (Low =:= any orelse Val >= Low)
+          andalso (High =:= any orelse Val =< High)) of
         true  -> {Val, NewError};
         false -> ?THROW_Z_ERROR(NewError)
     end.
@@ -100,7 +100,7 @@ z_bin_to_ex_atom({Val, _Error}, NewError) ->
         X when is_atom(X) -> {X, NewError};
         _    -> ?THROW_Z_ERROR(NewError)
     end.
-    
+
 -spec z_bin_to_int(z_value(binary())) -> z_value(integer()).
 z_bin_to_int({_Val, Error}=Z) -> z_bin_to_int(Z, Error).
 
@@ -143,7 +143,7 @@ z_in_list({Val, _Error}, {Lst}, NewError) ->
 
 -spec z_only_loweralpha(z_value(string())) -> z_value(string()).
 z_only_loweralpha({_Val, Error}=Z) -> z_only_loweralpha(Z, Error).
-    
+
 -spec z_only_loweralpha(z_value(string()), error_atom()) -> z_value(string()).
 z_only_loweralpha({Val, _Error}, NewError) ->
     case catch test_only_loweralpha(Val) of
