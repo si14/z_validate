@@ -142,18 +142,18 @@ z_proplist_get(?Z_VALUE(Val, _Err), {Key}, NewErr) ->
                      {integer() | any, integer() | any}) -> z_value(integer()).
 z_int_in_range(?Z_VALUE(Val, Err)=ZVal, {Low, High}) ->
     ?Z_CHECK_OLD_ZVAL(is_integer(Val)
-                     andalso (Low =:= any orelse Val >= Low)
-                     andalso (High =:= any orelse Val =< High),
-                     ZVal, Err).
+                      andalso (Low =:= any orelse Val >= Low)
+                      andalso (High =:= any orelse Val =< High),
+                      ZVal, Err).
 
 -spec z_int_in_range(z_value(integer()),
                      {integer() | any, integer() | any},
                      error_term()) -> z_value(integer()).
 z_int_in_range(?Z_VALUE(Val, _Err), {Low, High}, NewErr) ->
     ?Z_CHECK_NEW_ZVAL(is_integer(Val)
-                     andalso (Low =:= any orelse Val >= Low)
-                     andalso (High =:= any orelse Val =< High),
-                     Val, NewErr).
+                      andalso (Low =:= any orelse Val >= Low)
+                      andalso (High =:= any orelse Val =< High),
+                      Val, NewErr).
 
 -spec z_in_list(z_value(T), {list(T)}) -> z_value(T).
 z_in_list(?Z_VALUE(Val, Err)=ZVal, {Lst}) ->
