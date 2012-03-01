@@ -23,7 +23,9 @@ handle_output({error, Error}) ->
 err_to_str(error_in_foo) -> "you have an error in your foo!";
 err_to_str(error_in_bar) -> "you have an error in your bar!";
 err_to_str(math_error)   -> "math error";
-err_to_str(bad_guy)      -> "looks like you are bad guy!".
+err_to_str(bad_guy)      -> "looks like you are bad guy!";
+err_to_str(Error) ->
+    lists:flatten(io_lib:format("unknown error '~s'", [Error])).
 
 handle_input(Input) ->
     try
@@ -33,7 +35,7 @@ handle_input(Input) ->
         BarBin = z_proplist_get(MaybeInput, {bar}, error_in_bar),
         MaybeBadBar = z_bin_to_list(BarBin),
         GoodBar1 = z_verify(fun justletters/1, MaybeBadBar, bad_guy),
-        GoodBar2 = z_only_loweralpha(MaybeBadBar, bad_guy),
+        GoodBar2 = z_only_loweralpha_str(MaybeBadBar, bad_guy),
         GoodBar2 = GoodBar1,
         GoodBarUpper = z_apply(fun upper/1, GoodBar1),
         ?Z_CATCH(throw(foobar)),

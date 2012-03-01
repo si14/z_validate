@@ -1,10 +1,10 @@
--define(Z_OK(VAR), throw:{z_validate, {ok, VAR}}).
--define(Z_ERROR(VAR), throw:{z_validate, {error, VAR}}).
+-define(Z_OK(VAR), throw:{z_throw, {ok, VAR}}).
+-define(Z_ERROR(VAR), throw:{z_throw, {error, VAR}}).
 -define(Z_CATCH(EXPR), ?Z_CATCH(EXPR, undefined)).
 -define(Z_CATCH(EXPR, ERROR), try
                                   EXPR
                               catch
-                                  _:_ -> throw({z_validate, {error, ERROR}})
+                                  _:_ -> throw({z_throw, {error, ERROR}})
                               end).
 
 
@@ -16,7 +16,9 @@
                      z_bin_to_list/1, z_bin_to_list/2,
                      z_bin_to_bool/1, z_bin_to_bool/2,
                      z_bin_to_ex_atom/1, z_bin_to_ex_atom/2,
-                     z_only_loweralpha/1, z_only_loweralpha/2,
+                     z_only_loweralpha_str/1, z_only_loweralpha_str/2,
+                     z_is_email_str/1, z_is_email_str/2,
+                     z_is_email_bin/1, z_is_email_bin/2,
                      z_verify/2, z_verify/3,
                      z_apply/2, z_apply/3,
                      z_return/1]).
