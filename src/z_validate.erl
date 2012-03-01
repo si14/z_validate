@@ -30,14 +30,14 @@
             _               -> ?THROW_Z_ERROR(ERR)
         end).
 -define(Z_CHECK_OLD_ZVAL(CHECKER, ZVAL, ERR), % this one don't reconstruct
-        case CHECKER of
-            true  -> ZVAL;
-            false -> ?THROW_Z_ERROR(ERR)
+        case catch CHECKER of
+            true -> ZVAL;
+            _    -> ?THROW_Z_ERROR(ERR)
         end).
 -define(Z_CHECK_NEW_ZVAL(CHECKER, VAL, ERR),
-        case CHECKER of
-            true  -> ?Z_VALUE(VAL, ERR);
-            false -> ?THROW_Z_ERROR(ERR)
+        case catch CHECKER of
+            true -> ?Z_VALUE(VAL, ERR);
+            _    -> ?THROW_Z_ERROR(ERR)
         end).
 
 -type error_term() :: any().
@@ -60,20 +60,14 @@ z_return(Val) -> ?THROW_Z_OK(Val).
 
 %% This function doesn't use z_verify/3 to not reconstruct Z_VALUE.
 -spec z_verify(fun((A) -> boolean()), z_value(A)) -> z_value(A).
-z_verify(Fun, ?Z_VALUE(Val, Err)=Input) ->
-    case catch Fun(Val) of
-        true -> Input;
-        _    -> ?THROW_Z_ERROR(Err)
-    end.
+z_verify(Fun, ?Z_VALUE(Val, Err)=ZVal) ->
+    ?Z_CHECK_OLD_ZVAL(Fun(Val), ZVal, Err).
 
 -spec z_verify(fun((A) -> boolean()),
                z_value(A),
                error_term()) -> z_value(A).
 z_verify(Fun, ?Z_VALUE(Val, _OldErr), NewErr) ->
-    case catch Fun(Val) of
-        true -> ?Z_VALUE(Val, NewErr);
-        _    -> ?THROW_Z_ERROR(NewErr)
-    end.
+    ?Z_CHECK_NEW_ZVAL(Fun(Val), Val, NewErr).
 
 -spec z_apply(fun((A) -> {ok, B} | any()),
               z_value(A)) -> z_value(B).
