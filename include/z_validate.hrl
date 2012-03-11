@@ -22,4 +22,4 @@
                      z_is_email_bin/1, z_is_email_bin/2,
                      z_verify/2, z_verify/3,
                      z_apply/2, z_apply/3,
-                     z_return/1]).
+                     z_return/1, z_fail/1]).

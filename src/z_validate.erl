@@ -13,7 +13,7 @@
          z_is_email_bin/1, z_is_email_bin/2,
          z_verify/2, z_verify/3,
          z_apply/2, z_apply/3,
-         z_return/1]).
+         z_return/1, z_fail/1]).
 
 -define(THROW_Z_ERROR(ERROR), throw({z_throw, {error, ERROR}})).
 -define(THROW_Z_OK(RESULT),   throw({z_throw, {ok, RESULT}})).
@@ -58,6 +58,9 @@ z_unwrap(?Z_VALUE(Val, _Error)) -> Val.
 
 -spec z_return(any()) -> none().
 z_return(Val) -> ?THROW_Z_OK(Val).
+
+-spec z_fail(any()) -> none().
+z_fail(Error) -> ?THROW_Z_ERROR(Error).
 
 %% This function doesn't use z_verify/3 to not reconstruct Z_VALUE.
 -spec z_verify(fun((A) -> boolean()), z_value(A)) -> z_value(A).
