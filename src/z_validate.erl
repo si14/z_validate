@@ -110,7 +110,7 @@ z_bin_to_pos_int(?Z_VALUE(_Val, Err)=ZVal) ->
 
 -spec z_bin_to_pos_int(z_value(binary()), error_term()) -> z_value(pos_integer()).
 z_bin_to_pos_int(ZVal, NewErr) ->
-    z_verify(fun (X) -> X >= 0 end, z_bin_to_int(ZVal, NewErr)).
+    z_verify(fun (X) -> X > 0 end, z_bin_to_int(ZVal, NewErr)).
 
 -spec z_bin_to_list(z_value(binary())) -> z_value(list()).
 z_bin_to_list(?Z_VALUE(_Val, Err)=ZVal) ->
