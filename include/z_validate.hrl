@@ -6,6 +6,7 @@
                               catch
                                   _:_ -> throw({z_throw, {error, ERROR}})
                               end).
+-define(Z_THROW(ERROR), throw({z_throw, {error, ERROR}})).
 
 
 -import(z_validate, [z_wrap/1, z_wrap/2, z_unwrap/1,
