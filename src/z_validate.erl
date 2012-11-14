@@ -83,6 +83,7 @@ z_apply(Fun, ?Z_VALUE(_, Err)=ZVal) ->
 z_apply(Fun, ?Z_VALUE(Val, _Err), NewErr) ->
     case catch Fun(Val) of
         {ok, NewVal} -> ?Z_VALUE(NewVal, NewErr);
+        {error, Err} -> ?THROW_Z_ERROR(Err);
         _            -> ?THROW_Z_ERROR(NewErr)
     end.
 
