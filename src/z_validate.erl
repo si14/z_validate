@@ -5,6 +5,7 @@
          z_int_in_range/2, z_int_in_range/3,
          z_bin_to_int/1, z_bin_to_int/2,
          z_bin_to_pos_int/1, z_bin_to_pos_int/2,
+         z_bin_to_non_neg_int/1, z_bin_to_non_neg_int/2,
          z_bin_to_list/1, z_bin_to_list/2,
          z_bin_to_bool/1, z_bin_to_bool/2,
          z_bin_to_ex_atom/1, z_bin_to_ex_atom/2,
@@ -112,6 +113,14 @@ z_bin_to_pos_int(?Z_VALUE(_Val, Err)=ZVal) ->
 -spec z_bin_to_pos_int(z_value(binary()), error_term()) -> z_value(pos_integer()).
 z_bin_to_pos_int(ZVal, NewErr) ->
     z_verify(fun (X) -> X > 0 end, z_bin_to_int(ZVal, NewErr)).
+
+-spec z_bin_to_non_neg_int(z_value(binary())) -> z_value(non_neg_integer()).
+z_bin_to_non_neg_int(?Z_VALUE(_Val, Err)=ZVal) ->
+    z_bin_to_non_neg_int(ZVal, Err).
+
+-spec z_bin_to_non_neg_int(z_value(binary()), error_term()) -> z_value(non_neg_integer()).
+z_bin_to_non_neg_int(ZVal, NewErr) ->
+    z_verify(fun (X) -> X >= 0 end, z_bin_to_int(ZVal, NewErr)).
 
 -spec z_bin_to_list(z_value(binary())) -> z_value(list()).
 z_bin_to_list(?Z_VALUE(_Val, Err)=ZVal) ->
